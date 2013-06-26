@@ -18,6 +18,7 @@ package org.ros.android;
 
 import com.google.common.base.Preconditions;
 
+import android.app.AlertDialog;
 import android.app.Notification;
 import android.app.PendingIntent;
 import android.app.Service;
@@ -29,6 +30,8 @@ import android.os.IBinder;
 import android.os.PowerManager;
 import android.os.PowerManager.WakeLock;
 import android.util.Log;
+import android.widget.Toast;
+
 import org.ros.RosCore;
 import org.ros.android.android_gingerbread_mr1.R;
 import org.ros.concurrent.ListenerGroup;
@@ -202,13 +205,18 @@ public class NodeMainExecutorService extends Service implements NodeMainExecutor
   }
 
   public void startMaster() {
-    rosCore = RosCore.newPrivate();
-    rosCore.start();
+	  
+	//new StartCoreAsync().execute(rosCore);
+	rosCore = RosCore.newPublic(11311);
+	rosCore.start();
+  
     try {
       rosCore.awaitStart();
     } catch (Exception e) {
       throw new RosRuntimeException(e);
     }
     masterUri = rosCore.getUri();
+    
+    Toast.makeText(this, "Master URI: " + masterUri, Toast.LENGTH_LONG).show();
   }
 }
