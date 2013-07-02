@@ -1,0 +1,47 @@
+K 25
+svn:wc:ra_dav:version-url
+V 46
+/svn/!svn/ver/8/trunk/KorselControl/res/layout
+END
+main.xml
+K 25
+svn:wc:ra_dav:version-url
+V 55
+/svn/!svn/ver/8/trunk/KorselControl/res/layout/main.xml
+END
+debug_dialog.xml
+K 25
+svn:wc:ra_dav:version-url
+V 63
+/svn/!svn/ver/8/trunk/KorselControl/res/layout/debug_dialog.xml
+END
+device_list.xml
+K 25
+svn:wc:ra_dav:version-url
+V 62
+/svn/!svn/ver/3/trunk/KorselControl/res/layout/device_list.xml
+END
+robot_sim.xml
+K 25
+svn:wc:ra_dav:version-url
+V 60
+/svn/!svn/ver/8/trunk/KorselControl/res/layout/robot_sim.xml
+END
+device_name.xml
+K 25
+svn:wc:ra_dav:version-url
+V 62
+/svn/!svn/ver/3/trunk/KorselControl/res/layout/device_name.xml
+END
+settings_dialog.xml
+K 25
+svn:wc:ra_dav:version-url
+V 66
+/svn/!svn/ver/8/trunk/KorselControl/res/layout/settings_dialog.xml
+END
+bak_main.xml
+K 25
+svn:wc:ra_dav:version-url
+V 59
+/svn/!svn/ver/4/trunk/KorselControl/res/layout/bak_main.xml
+END
