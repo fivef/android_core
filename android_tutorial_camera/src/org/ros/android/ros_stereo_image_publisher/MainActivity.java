@@ -80,6 +80,7 @@ public class MainActivity extends RosActivity {
     rosCameraPreviewView.setCamera(Camera.open(cameraId));
     NodeConfiguration nodeConfiguration =
         NodeConfiguration.newPublic(InetAddressFactory.newNonLoopback().getHostAddress());
+    nodeConfiguration.setNodeName("ros_camera_preview_view2");
     nodeConfiguration.setMasterUri(getMasterUri());
     nodeMainExecutor.execute(rosCameraPreviewView, nodeConfiguration);
   }
