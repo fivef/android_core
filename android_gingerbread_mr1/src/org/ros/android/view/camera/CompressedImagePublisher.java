@@ -48,7 +48,7 @@ class CompressedImagePublisher implements RawImageListener {
 
   public CompressedImagePublisher(ConnectedNode connectedNode) {
     this.connectedNode = connectedNode;
-    NameResolver resolver = connectedNode.getResolver().newChild("camera2");
+    NameResolver resolver = connectedNode.getResolver().newChild("camera");
     imagePublisher =
         connectedNode.newPublisher(resolver.resolve("image/compressed"),
             sensor_msgs.CompressedImage._TYPE);
