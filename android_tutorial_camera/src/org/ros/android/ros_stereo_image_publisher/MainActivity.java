@@ -49,6 +49,7 @@ public class MainActivity extends RosActivity {
     getWindow().addFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN);
     setContentView(R.layout.main);
     rosCameraPreviewView = (RosCameraPreviewView) findViewById(R.id.ros_camera_preview_view);
+    
   }
 
   @Override
@@ -78,6 +79,8 @@ public class MainActivity extends RosActivity {
   protected void init(NodeMainExecutor nodeMainExecutor) {
     cameraId = 0;
     rosCameraPreviewView.setCamera(Camera.open(cameraId));
+    rosCameraPreviewView.setTopic("camera2");
+    rosCameraPreviewView.setCompressionRate(50);
     NodeConfiguration nodeConfiguration =
         NodeConfiguration.newPublic(InetAddressFactory.newNonLoopback().getHostAddress());
     nodeConfiguration.setNodeName("ros_camera_preview_view2");
