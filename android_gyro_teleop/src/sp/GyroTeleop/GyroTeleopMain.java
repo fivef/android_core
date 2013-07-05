@@ -5,17 +5,19 @@ import java.text.DecimalFormat;
 import javax.vecmath.Matrix3d;
 import javax.vecmath.Vector3d;
 
-import android.app.Activity;
-import android.app.Dialog;
+import org.ros.address.InetAddressFactory;
+import org.ros.android.RosActivity;
+import org.ros.exception.RosRuntimeException;
+import org.ros.node.NodeConfiguration;
+import org.ros.node.NodeMainExecutor;
 
+import android.app.Dialog;
 import android.content.Context;
-import android.content.Intent;
 import android.content.SharedPreferences;
 import android.hardware.Sensor;
 import android.hardware.SensorEvent;
 import android.hardware.SensorEventListener;
 import android.hardware.SensorManager;
-import android.os.AsyncTask;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.Gravity;
@@ -29,17 +31,9 @@ import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.SeekBar;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.tokaracamara.android.verticalslidevar.VerticalProgressBar;
 import com.tokaracamara.android.verticalslidevar.VerticalProgressBarTopDown;
-
-import org.ros.address.InetAddressFactory;
-import org.ros.android.MessageCallable;
-import org.ros.android.RosActivity;
-import org.ros.android.view.RosTextView;
-import org.ros.node.NodeConfiguration;
-import org.ros.node.NodeMainExecutor;
 
 /**
  * This is the program's main activity.
@@ -54,7 +48,7 @@ public class GyroTeleopMain extends RosActivity {
 
 	}
 
-	private Talker talker;
+	private MotorSpeedNode myMotorSpeedNode;
 
 	/**
 	 * Tag for Logging
@@ -80,8 +74,10 @@ public class GyroTeleopMain extends RosActivity {
 	 * Default threshold value (used to decrease death spot)
 	 */
 	private static final int defaultThreshold = 125;
-	
+
 	private static final int MAX_SPEED = 1024;
+
+	private boolean connected = false;
 
 	/**
 	 * SensorManager needed for accelerometer initialization
@@ -271,8 +267,8 @@ public class GyroTeleopMain extends RosActivity {
 
 				refreshSim(motorLspeed, motorRspeed);
 
-				talker.setLeftMotorSpeed(motorLspeed);
-				talker.setRightMotorSpeed(motorRspeed);
+				myMotorSpeedNode.setLeftMotorSpeed(motorLspeed);
+				myMotorSpeedNode.setRightMotorSpeed(motorRspeed);
 			}
 
 		}
@@ -348,8 +344,8 @@ public class GyroTeleopMain extends RosActivity {
 
 					rotationMatrix.setIdentity();
 
-					talker.setLeftMotorSpeed(0);
-					talker.setRightMotorSpeed(0);
+					myMotorSpeedNode.setLeftMotorSpeed(0);
+					myMotorSpeedNode.setRightMotorSpeed(0);
 
 					accActive = false;
 
@@ -371,8 +367,6 @@ public class GyroTeleopMain extends RosActivity {
 				if (event.getAction() == MotionEvent.ACTION_UP) {
 
 					connectButtonView.setImageResource(R.drawable.buttons_01);
-
-					// TODO start node here
 
 					return true;
 				}
@@ -469,7 +463,12 @@ public class GyroTeleopMain extends RosActivity {
 		startButtonView.setOnTouchListener(myTouchListener);
 
 		connectButtonView = (ImageView) findViewById(R.id.connectButton);
-		connectButtonView.setImageResource(R.drawable.buttons_01);
+		if (connected) {
+			connectButtonView.setImageResource(R.drawable.buttons_activated_01);
+
+		} else {
+			connectButtonView.setImageResource(R.drawable.buttons_01);
+		}
 		connectButtonView.setOnTouchListener(myTouchListener);
 
 		settingsButtonView = (ImageView) findViewById(R.id.settingsButton);
@@ -674,13 +673,28 @@ public class GyroTeleopMain extends RosActivity {
 
 	@Override
 	protected void init(NodeMainExecutor nodeMainExecutor) {
-		talker = new Talker();
-		NodeConfiguration nodeConfiguration = NodeConfiguration.newPublic(InetAddressFactory.newNonLoopback().getHostAddress());
+
+		myMotorSpeedNode = new MotorSpeedNode();
+
+		NodeConfiguration nodeConfiguration;
+
+		try {
+			nodeConfiguration = NodeConfiguration.newPublic(InetAddressFactory
+					.newNonLoopback().getHostAddress());
+		} catch (RosRuntimeException e) {
+
+			if (D)
+				Log.d(TAG, e.getMessage() + "\n is WLAN switched on?");
+
+			return;
+		}
 		// At this point, the user has already been prompted to either enter the
 		// URI
 		// of a master to use or to start a master locally.
 		nodeConfiguration.setMasterUri(getMasterUri());
-		nodeMainExecutor.execute(talker, nodeConfiguration);
+		nodeMainExecutor.execute(myMotorSpeedNode, nodeConfiguration);
 
+		connected = true;
 	}
+
 }

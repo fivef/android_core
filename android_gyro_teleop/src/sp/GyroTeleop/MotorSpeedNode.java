@@ -29,7 +29,7 @@ import android.util.Log;
  * 
  * @author damonkohler@google.com (Damon Kohler)
  */
-public class Talker extends AbstractNodeMain {
+public class MotorSpeedNode extends AbstractNodeMain {
 
 	private int leftMotorSpeed = 0;
 	private int rightMotorSpeed = 0;
@@ -37,14 +37,14 @@ public class Talker extends AbstractNodeMain {
 	@Override
 	public GraphName getDefaultNodeName() {
 		// this sets the node name
-		return GraphName.of("android_gyro_teleop/talker");
+		return GraphName.of("android_gyro_teleop/motor_speeds");
 	}
 
 	@Override
 	public void onStart(final ConnectedNode connectedNode) {
-		Log.i("Talker", "onstart");
+		Log.d("MotorSpeedNode", "onstart");
 		final Publisher<std_msgs.String> publisher = connectedNode
-				.newPublisher("chatter", std_msgs.String._TYPE);
+				.newPublisher("motor_speeds", std_msgs.String._TYPE);
 		// This CancellableLoop will be canceled automatically when the node
 		// shuts
 		// down.
@@ -54,19 +54,20 @@ public class Talker extends AbstractNodeMain {
 			@Override
 			protected void setup() {
 				sequenceNumber = 0;
-				Log.d("Talker", "setup loop");
+				Log.d("MotorSpeedNode", "setup loop");
 			}
 
 			@Override
 			protected void loop() throws InterruptedException {
-				
+
 				std_msgs.String str = publisher.newMessage();
 				str.setData(leftMotorSpeed + " " + rightMotorSpeed);
-				
-				Log.d("Talker", leftMotorSpeed + " " + rightMotorSpeed + "");
-				
+
+				Log.d("MotorSpeedNode", "leftMotorSpeed " + leftMotorSpeed
+						+ " rightMotorSpeed " + rightMotorSpeed + "");
+
 				publisher.publish(str);
-				
+
 				sequenceNumber++;
 				Thread.sleep(100);
 			}
