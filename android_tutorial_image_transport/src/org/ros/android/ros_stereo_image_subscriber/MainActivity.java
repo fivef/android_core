@@ -67,7 +67,7 @@ public class MainActivity extends RosActivity {
     image.setMessageToBitmapCallable(new BitmapFromCompressedImage());
 
     image2 = (RosImageView<sensor_msgs.CompressedImage>) findViewById(R.id.image2);
-    image2.setTopicName("/camera2/image2/compressed");
+    image2.setTopicName("/camera2/image/compressed");
     image2.setMessageType(sensor_msgs.CompressedImage._TYPE);
     image2.setMessageToBitmapCallable(new BitmapFromCompressedImage());
     
