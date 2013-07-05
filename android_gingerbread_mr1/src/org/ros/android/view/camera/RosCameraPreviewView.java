@@ -29,6 +29,9 @@ import org.ros.node.NodeMain;
  * @author damonkohler@google.com (Damon Kohler)
  */
 public class RosCameraPreviewView extends CameraPreviewView implements NodeMain {
+	
+  private String topicName = "camera";
+  private int compressionRate = 50;
 
   public RosCameraPreviewView(Context context) {
     super(context);
@@ -41,6 +44,23 @@ public class RosCameraPreviewView extends CameraPreviewView implements NodeMain 
   public RosCameraPreviewView(Context context, AttributeSet attrs, int defStyle) {
     super(context, attrs, defStyle);
   }
+  
+  /**
+   * Sets the topic name the images are published to (default: camera)
+   * @param topicName
+   */
+  public void setTopicName(String topicName) {
+    this.topicName = topicName;
+  }
+  
+  /**
+   * Sets the compression rate of the published image (default:50) 
+   * 
+   * @param compressionRate Range 0..100  100 is best Quality
+   */
+  public void setCompressionRate(int compressionRate){
+    this.compressionRate = compressionRate;
+  }
 
   @Override
   public GraphName getDefaultNodeName() {
@@ -49,7 +69,10 @@ public class RosCameraPreviewView extends CameraPreviewView implements NodeMain 
 
   @Override
   public void onStart(ConnectedNode connectedNode) {
-    setRawImageListener(new CompressedImagePublisher(connectedNode));
+	CompressedImagePublisher myCompressedImagePublisher = new CompressedImagePublisher(connectedNode);
+	myCompressedImagePublisher.setTopicName(this.topicName);
+	myCompressedImagePublisher.setCompressionRate(this.compressionRate);
+    setRawImageListener(myCompressedImagePublisher);
   }
 
   @Override
@@ -63,4 +86,6 @@ public class RosCameraPreviewView extends CameraPreviewView implements NodeMain 
   @Override
   public void onError(Node node, Throwable throwable) {
   }
+  
+
 }

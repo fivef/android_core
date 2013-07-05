@@ -39,6 +39,8 @@ class CompressedImagePublisher implements RawImageListener {
   private final ConnectedNode connectedNode;
   private final Publisher<sensor_msgs.CompressedImage> imagePublisher;
   private final Publisher<sensor_msgs.CameraInfo> cameraInfoPublisher;
+  private String topicName = "camera";
+  private int compressionRate = 50;
 
   private byte[] rawImageBuffer;
   private Size rawImageSize;
@@ -48,7 +50,8 @@ class CompressedImagePublisher implements RawImageListener {
 
   public CompressedImagePublisher(ConnectedNode connectedNode) {
     this.connectedNode = connectedNode;
-    NameResolver resolver = connectedNode.getResolver().newChild("camera");
+    //set TOPIC name
+    NameResolver resolver = connectedNode.getResolver().newChild(this.topicName);
     imagePublisher =
         connectedNode.newPublisher(resolver.resolve("image/compressed"),
             sensor_msgs.CompressedImage._TYPE);
@@ -76,7 +79,7 @@ class CompressedImagePublisher implements RawImageListener {
     image.getHeader().setStamp(currentTime);
     image.getHeader().setFrameId(frameId);
 
-    Preconditions.checkState(yuvImage.compressToJpeg(rect, 20, stream));
+    Preconditions.checkState(yuvImage.compressToJpeg(rect, compressionRate, stream));
     image.setData(stream.buffer().copy());
     stream.buffer().clear();
 
@@ -89,5 +92,23 @@ class CompressedImagePublisher implements RawImageListener {
     cameraInfo.setWidth(size.width);
     cameraInfo.setHeight(size.height);
     cameraInfoPublisher.publish(cameraInfo);
+  }
+  
+  /**
+   * Sets the topic name the images are published to (default: camera)
+   * 
+   * @param topicName
+   */
+  public void setTopicName(String topicName) {
+    this.topicName = topicName;
+  }
+  
+  /**
+   * Sets the compression rate of the published image (default:50) 
+   * 
+   * @param compressionRate Range 0..100  100 is best Quality
+   */
+  public void setCompressionRate(int compressionRate){
+    this.compressionRate = compressionRate;
   }
 }
