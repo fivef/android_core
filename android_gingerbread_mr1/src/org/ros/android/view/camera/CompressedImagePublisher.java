@@ -48,7 +48,8 @@ class CompressedImagePublisher implements RawImageListener {
   private Rect rect;
   private ChannelBufferOutputStream stream;
 
-  public CompressedImagePublisher(ConnectedNode connectedNode) {
+  public CompressedImagePublisher(ConnectedNode connectedNode, String topicName) {
+	this.topicName = topicName;
     this.connectedNode = connectedNode;
     //set TOPIC name
     NameResolver resolver = connectedNode.getResolver().newChild(this.topicName);
@@ -94,15 +95,7 @@ class CompressedImagePublisher implements RawImageListener {
     cameraInfoPublisher.publish(cameraInfo);
   }
   
-  /**
-   * Sets the topic name the images are published to (default: camera)
-   * 
-   * @param topicName
-   */
-  public void setTopicName(String topicName) {
-    this.topicName = topicName;
-  }
-  
+
   /**
    * Sets the compression rate of the published image (default:50) 
    * 

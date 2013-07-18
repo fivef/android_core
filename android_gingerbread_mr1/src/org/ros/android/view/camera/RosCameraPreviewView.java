@@ -49,7 +49,7 @@ public class RosCameraPreviewView extends CameraPreviewView implements NodeMain 
    * Sets the topic name the images are published to (default: camera)
    * @param topicName
    */
-  public void setTopicName(String topicName) {
+  public void setTopic(String topicName) {
     this.topicName = topicName;
   }
   
@@ -69,8 +69,7 @@ public class RosCameraPreviewView extends CameraPreviewView implements NodeMain 
 
   @Override
   public void onStart(ConnectedNode connectedNode) {
-	CompressedImagePublisher myCompressedImagePublisher = new CompressedImagePublisher(connectedNode);
-	myCompressedImagePublisher.setTopicName(this.topicName);
+	CompressedImagePublisher myCompressedImagePublisher = new CompressedImagePublisher(connectedNode, this.topicName);
 	myCompressedImagePublisher.setCompressionRate(this.compressionRate);
     setRawImageListener(myCompressedImagePublisher);
   }
