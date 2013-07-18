@@ -36,10 +36,11 @@ import org.ros.node.NodeMainExecutor;
 public class MainActivity extends RosActivity {
 
   private int cameraId;
+  //TODO add left or right option private String leftOrRight = "l";
   private RosCameraPreviewView rosCameraPreviewView;
 
   public MainActivity() {
-    super("CameraTutorial2", "CameraTutorial2");
+    super("CameraTutorial2", "CameraTutorial2"); //both 2
   }
 
   @Override
@@ -79,11 +80,11 @@ public class MainActivity extends RosActivity {
   protected void init(NodeMainExecutor nodeMainExecutor) {
     cameraId = 0;
     rosCameraPreviewView.setCamera(Camera.open(cameraId));
-    rosCameraPreviewView.setTopic("camera2");
+    rosCameraPreviewView.setTopic("camera2"); //2
     rosCameraPreviewView.setCompressionRate(50);
     NodeConfiguration nodeConfiguration =
         NodeConfiguration.newPublic(InetAddressFactory.newNonLoopback().getHostAddress());
-    nodeConfiguration.setNodeName("ros_camera_preview_view2");
+    nodeConfiguration.setNodeName("ros_camera_preview_view2"); //2
     nodeConfiguration.setMasterUri(getMasterUri());
     nodeMainExecutor.execute(rosCameraPreviewView, nodeConfiguration);
   }
