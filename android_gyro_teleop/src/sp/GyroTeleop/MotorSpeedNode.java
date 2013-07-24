@@ -21,6 +21,7 @@ import org.ros.node.AbstractNodeMain;
 import org.ros.node.ConnectedNode;
 import org.ros.node.NodeMain;
 import org.ros.node.topic.Publisher;
+import tcm200_msgs.Velocity;
 
 import android.util.Log;
 
@@ -43,8 +44,8 @@ public class MotorSpeedNode extends AbstractNodeMain {
 	@Override
 	public void onStart(final ConnectedNode connectedNode) {
 		Log.d("MotorSpeedNode", "onstart");
-		final Publisher<std_msgs.String> publisher = connectedNode
-				.newPublisher("motor_speeds", std_msgs.String._TYPE);
+		final Publisher<Velocity> publisher = connectedNode
+				.newPublisher("motor_speeds", Velocity._TYPE);
 		// This CancellableLoop will be canceled automatically when the node
 		// shuts
 		// down.
@@ -60,8 +61,9 @@ public class MotorSpeedNode extends AbstractNodeMain {
 			@Override
 			protected void loop() throws InterruptedException {
 
-				std_msgs.String str = publisher.newMessage();
-				str.setData(leftMotorSpeed + " " + rightMotorSpeed);
+				Velocity vel = publisher.newMessage();
+				vel.setMotor_1_velocity(leftMotorSpeed);
+				vel.setMotor_2_velocity(rightMotorSpeed);
 
 				Log.d("MotorSpeedNode", "leftMotorSpeed " + leftMotorSpeed
 						+ " rightMotorSpeed " + rightMotorSpeed + "");
