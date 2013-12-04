@@ -63,17 +63,28 @@ public class GyroTeleopMain extends RosActivity {
 	/**
 	 * Default maximum pitch value (forward, backward tilt)
 	 */
-	private static final int defaultmaxPitch = 6;
+	private static final int defaultPitchSensitivity = 50;
 
 	/**
 	 * Default maximum roll value (left, right tilt
 	 */
-	private static final int defaultmaxRoll = 6;
+	private static final int defaultRollSensitivity = 50;
+	
+	/**
+	 * Maximum roll (used for steering sensitivity)
+	 */
+	
+	private static final int maxRoll = 100;
+	
+	/**
+	 * Maximum pitch (used for steering sensitivity)
+	 */
+	private static final int maxPitch = 100;
 
 	/**
 	 * Default threshold value (used to decrease death spot)
 	 */
-	private static final int defaultThreshold = 125;
+	private static final int defaultThreshold = 1024;
 
 	private static final int MAX_SPEED = 1024;
 
@@ -143,15 +154,12 @@ public class GyroTeleopMain extends RosActivity {
 	 */
 	int threshold;
 
-	/**
-	 * Maximum roll (used for steering sensitivity)
-	 */
-	int maxRoll;
 
-	/**
-	 * Maximum pitch (used for steering sensitivity)
-	 */
-	int maxPitch;
+	int rollSensitivity;
+
+	int pitchSensitivity;
+	
+
 
 	/**
 	 * Variable for DecimalFormat definition
@@ -194,8 +202,8 @@ public class GyroTeleopMain extends RosActivity {
 				// normalize Roll
 				double normalizedRoll = 0;
 
-				if (Math.abs(roll) < maxRoll) {
-					normalizedRoll = roll / maxRoll;
+				if (Math.abs(roll) < rollSensitivity) {
+					normalizedRoll = roll / rollSensitivity;
 				} else {
 					if (roll > 0) {
 						normalizedRoll = 1;
@@ -207,8 +215,8 @@ public class GyroTeleopMain extends RosActivity {
 				// normalize Pitch
 				double normalizedPitch = 0;
 
-				if (Math.abs(pitch) < maxPitch) {
-					normalizedPitch = pitch / maxPitch;
+				if (Math.abs(pitch) < pitchSensitivity) {
+					normalizedPitch = pitch / pitchSensitivity;
 				} else {
 					if (pitch > 0) {
 						normalizedPitch = 1;
@@ -497,10 +505,10 @@ public class GyroTeleopMain extends RosActivity {
 
 		// Load pitch roll and threshold from settings (if not available use
 		// default values)
-		maxPitch = Integer.parseInt(settings.getString("MAXPITCH",
-				String.valueOf(defaultmaxPitch)));
-		maxRoll = Integer.parseInt(settings.getString("MAXROLL",
-				String.valueOf(defaultmaxRoll)));
+		pitchSensitivity = Integer.parseInt(settings.getString("MAXPITCH",
+				String.valueOf(defaultPitchSensitivity)));
+		rollSensitivity = Integer.parseInt(settings.getString("MAXROLL",
+				String.valueOf(defaultRollSensitivity)));
 		threshold = Integer.parseInt(settings.getString("THRESHOLD",
 				String.valueOf(defaultThreshold)));
 
@@ -569,17 +577,17 @@ public class GyroTeleopMain extends RosActivity {
 
 		SeekBar sensitivityPitchBar = (SeekBar) mySettingsDialog
 				.findViewById(R.id.sensitivity_pitch_seekbar);
-		maxPitch = 10 - sensitivityPitchBar.getProgress(); // flip direction
+		pitchSensitivity = maxPitch - sensitivityPitchBar.getProgress(); // flip direction
 
 		SeekBar sensitivityRollBar = (SeekBar) mySettingsDialog
 				.findViewById(R.id.sensitivity_roll_seekbar);
-		maxRoll = 10 - sensitivityRollBar.getProgress(); // flip direction
+		rollSensitivity = maxRoll - sensitivityRollBar.getProgress(); // flip direction
 
 		// save values
 		SharedPreferences settings = getPreferences(android.content.Context.MODE_PRIVATE);
 		SharedPreferences.Editor editor = settings.edit();
-		editor.putString("MAXPITCH", String.valueOf(maxPitch));
-		editor.putString("MAXROLL", String.valueOf(maxRoll));
+		editor.putString("MAXPITCH", String.valueOf(pitchSensitivity));
+		editor.putString("MAXROLL", String.valueOf(rollSensitivity));
 		editor.putString("THRESHOLD", String.valueOf(threshold));
 		editor.commit();
 
@@ -594,8 +602,8 @@ public class GyroTeleopMain extends RosActivity {
 	 */
 	private void setDefaultSettings() {
 
-		maxRoll = defaultmaxRoll;
-		maxPitch = defaultmaxPitch;
+		rollSensitivity = defaultRollSensitivity;
+		pitchSensitivity = defaultPitchSensitivity;
 		threshold = defaultThreshold;
 
 		updateSettings();
@@ -613,11 +621,11 @@ public class GyroTeleopMain extends RosActivity {
 
 		SeekBar sensitivityPitchBar = (SeekBar) mySettingsDialog
 				.findViewById(R.id.sensitivity_pitch_seekbar);
-		sensitivityPitchBar.setProgress(10 - maxPitch); // flip direction
+		sensitivityPitchBar.setProgress(maxPitch - pitchSensitivity); // flip direction
 
 		SeekBar sensitivityRollBar = (SeekBar) mySettingsDialog
 				.findViewById(R.id.sensitivity_roll_seekbar);
-		sensitivityRollBar.setProgress(10 - maxRoll); // flip direction
+		sensitivityRollBar.setProgress(maxRoll - rollSensitivity); // flip direction
 
 	}
 

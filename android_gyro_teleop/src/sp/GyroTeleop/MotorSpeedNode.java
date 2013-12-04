@@ -75,13 +75,14 @@ public class MotorSpeedNode extends AbstractNodeMain {
 	}
 
 	public void setLeftMotorSpeed(int speed) {
-
-		leftMotorSpeed = speed;
+		rightMotorSpeed = speed;
+		
 
 	}
 
 	public void setRightMotorSpeed(int speed) {
 
-		rightMotorSpeed = speed;
+		
+		leftMotorSpeed = speed;
 	}
 }

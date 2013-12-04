@@ -8,9 +8,9 @@
             <TextView android:text="@string/settingsThreshold" android:layout_width="wrap_content" android:layout_height="wrap_content" android:id="@+id/threshold_label"></TextView>
             <SeekBar android:layout_width="match_parent" android:id="@+id/threshold_seekbar" android:layout_height="wrap_content" android:layout_gravity="center_horizontal" android:layout_marginTop="5dp" android:max="1024"></SeekBar>
             <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:layout_marginTop="20dp" android:text="@string/settingsSensitivityPitch" android:id="@+id/sensitivity_pitch_label"></TextView>
-            <SeekBar  android:layout_gravity="center_horizontal" android:layout_height="wrap_content" android:layout_width="match_parent" android:id="@+id/sensitivity_pitch_seekbar" android:max="9"></SeekBar>
+            <SeekBar  android:layout_gravity="center_horizontal" android:layout_height="wrap_content" android:layout_width="match_parent" android:id="@+id/sensitivity_pitch_seekbar" android:max="99"></SeekBar>
             <TextView android:layout_height="wrap_content" android:layout_marginTop="20dp" android:layout_width="wrap_content" android:text="@string/settingsSensitivityRoll" android:id="@+id/sensitivity_roll_label"></TextView>
-            <SeekBar android:layout_gravity="center_horizontal" android:layout_height="wrap_content" android:layout_width="match_parent" android:id="@+id/sensitivity_roll_seekbar" android:max="9"></SeekBar>
+            <SeekBar android:layout_gravity="center_horizontal" android:layout_height="wrap_content" android:layout_width="match_parent" android:id="@+id/sensitivity_roll_seekbar" android:max="99"></SeekBar>
             <LinearLayout android:layout_height="wrap_content" android:id="@+id/buttonsLayout" android:layout_width="wrap_content" android:layout_gravity="center_horizontal" android:layout_marginTop="20dp">
                 <Button android:id="@+id/settingsOK" android:layout_height="wrap_content" android:text="@string/settingsOK" android:layout_width="80dp"></Button>
                 <Button android:id="@+id/settingsDefault" android:layout_height="wrap_content" android:text="@string/settingsDefault" android:layout_width="80dp"></Button>
